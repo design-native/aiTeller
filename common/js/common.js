@@ -170,10 +170,10 @@ function loadHTML() {
 
 $(document).ready(function() {
     
-
+    $('.desc').html('<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>');  
 
       
-
+    fetchPageData('피노키오 스토리를 5문장으로 알려줘')
     
     setTimeout(function() {
 
