@@ -21,7 +21,9 @@
   .textBox{
     z-index: 2;
   }
-
+  .voiceBox > * {
+    margin: 0 5px; /* 좌우 마진 5px */
+  }
 
   .wrap.type-flex{
     display: flex;
@@ -288,6 +290,10 @@ and (orientation : portrait) {
   background-size: cover;
   background-position: center;
 }
+.imgBox .imgSelect .imgOption .btnImg.ACTIVE {
+  border: 3px solid rgba(240, 198, 59, 0.596); /* 노란색 테두리 */
+  box-shadow: 0 0 0 2px white; /* 배경 이미지와 테두리 사이의 여백 */
+}
 
 .imgBox .imgFixed {
   position: absolute;
@@ -327,5 +333,31 @@ and (orientation : portrait) {
 .front.resultBox .title,
 .back .textBox .title{
   font-family: 'HS-Regular';
+
+}
+
+
+.audioPlayer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 20px; /* voiceBox와 간격 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.audioPlayer audio {
+  width: 100%;
+  max-width: 400px; /* 플레이어 최대 너비 */
+  outline: none;
+}
+body {
+  background-image: url('../../back.jpg'); /* WebP 패턴 이미지 경로 */
+  background-repeat: repeat; /* 패턴 반복 */
+  background-size: auto; /* 패턴 기본 크기 유지 */
+  background-position: top left; /* 패턴 시작 위치 */
 
 }

@@ -55,16 +55,36 @@ async function fetchImage(prompt) {
 
       console.log(data.data[0].url)
       
-      $('#img1').css('background-image', 'url('+data.data[0].url+')');
-      $('#img2').css('background-image', 'url('+data.data[1].url+')');
-      $('#img3').css('background-image', 'url('+data.data[2].url+')');
-
+      $('#img1').css({'background-image': 'url('+data.data[0].url+')','background-size': '90%'});
+      $('#img2').css({'background-image': 'url('+data.data[1].url+')','background-size': '90%'});
+      $('#img3').css({'background-image': 'url('+data.data[2].url+')','background-size': '90%'});
+ 
     } catch (error) {
       console.error('Error fetching page data:', error);
       handleError(error);
   }
 }
 async function fetchChapterPageData(prompt) {
+    $('#img1').css({
+        'background-image': 'url(./loading.gif)',
+        'background-size': '30%', // 배경 이미지 크기를 50%로 설정
+        'background-repeat': 'no-repeat', // 반복 방지 (필요시)
+        'background-position': 'center' // 중앙 정렬 (선택사항)
+      });
+      $('#img2').css({
+        'background-image': 'url(./loading.gif)',
+        'background-size': '30%', // 배경 이미지 크기를 50%로 설정
+        'background-repeat': 'no-repeat', // 반복 방지 (필요시)
+        'background-position': 'center' // 중앙 정렬 (선택사항)
+      });
+      $('#img3').css({
+        'background-image': 'url(./loading.gif)',
+        'background-size': '30%', // 배경 이미지 크기를 50%로 설정
+        'background-repeat': 'no-repeat', // 반복 방지 (필요시)
+        'background-position': 'center' // 중앙 정렬 (선택사항)
+      });
+
+
   const urlWithParams = `${targetUrl}?prompt=${encodeURIComponent(prompt)}`;
   $("#chapterTitle").html("<br/>")
   $("#chapterContents").html("<br/><br/><br/><br/><br/><br/><br/>")
@@ -174,3 +194,8 @@ function nextPage() {
         console.log('마지막 페이지입니다.');
     }
 }
+function initializeAudioPlayer(audioElement, newSrc) {
+    $(audioElement).attr("src", newSrc); // src 속성 변경
+    audioElement.load(); // 새 소스를 로드
+    audioElement.play(); // 새 소스 재생
+  }

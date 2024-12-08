@@ -171,7 +171,20 @@ function loadHTML() {
 $(document).ready(function() {
     
     $('.desc').html('<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>');  
+    $(".btnImg").on("click", function() {
+        // 모든 버튼에서 ACTIVE 클래스 제거
+        $(".btnImg").removeClass("ACTIVE");
+    
+        // 클릭된 버튼에 ACTIVE 클래스 추가
+        $(this).addClass("ACTIVE");
 
+        const backgroundImage = $(this).css("background-image"); // 선택된 엘리먼트의 background-image 가져오기
+        $(".imgFixed .img").css("background-image", backgroundImage);
+
+
+
+
+      });
       
     fetchPageData('피노키오 스토리를 5문장으로 알려줘')
     
