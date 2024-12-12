@@ -7,6 +7,7 @@ $('.book')
 const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
 const targetUrl = 'https://story.switchflow.biz/movie/story';
 const targetImageUrl = 'https://story.switchflow.biz/movie/images';
+const targetVoiceUrl = 'https://story.switchflow.biz/movie/voice';
 
 
 /**
@@ -64,6 +65,36 @@ async function fetchImage(prompt) {
       handleError(error);
   }
 }
+async function fetchVoice(prompt) {
+    const urlWithParams = `${targetVoiceUrl}?text=${encodeURIComponent(prompt)}&voice_id=3`;
+  
+    try {
+        const response = await fetch(urlWithParams, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        });
+  
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+  
+        const data = await response.json();
+        console.log(data)
+  
+        console.log(data.data[0].url)
+        
+        $('#img1').css({'background-image': 'url('+data.data[0].url+')','background-size': '90%'});
+        $('#img2').css({'background-image': 'url('+data.data[1].url+')','background-size': '90%'});
+        $('#img3').css({'background-image': 'url('+data.data[2].url+')','background-size': '90%'});
+   
+      } catch (error) {
+        console.error('Error fetching page data:', error);
+        handleError(error);
+    }
+  }
+  
 async function fetchChapterPageData(prompt) {
     $('#img1').css({
         'background-image': 'url(./loading.gif)',
@@ -118,6 +149,8 @@ async function fetchChapterPageData(prompt) {
 
       $("#chapterTitle").html(subject)
       $("#chapterContents").html(contents)
+      $("#chapterTitle2").html(subject)
+      $("#chapterContents2").html(contents)
   } catch (error) {
       console.error('Error fetching page data:', error);
       handleError(error);
