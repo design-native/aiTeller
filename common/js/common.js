@@ -171,6 +171,33 @@ function loadHTML() {
 $(document).ready(function() {
     
     $('.desc').html('<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>');  
+
+
+    $("#btnVoice").on("click", function() {
+         console.log("fetch voice")
+         const prompt =       $("#chapterContents").html()
+         console.log(prompt);
+         fetchVoice(prompt);
+      });
+      
+
+
+      $("#btnMovie").on("click", function() {
+        console.log("fetch Movie")
+        const prompt =       $("#chapterContents").html()
+        const title =       $("#chapterTitle").html()
+        
+        console.log("prompt="+prompt)
+        console.log("voiceUrl="+voiceUrl)
+        console.log("imageUrl="+imageUrl)
+        
+        fetchMovie(title,prompt);
+
+     });
+     
+      
+
+
     $(".btnImg").on("click", function() {
         // 모든 버튼에서 ACTIVE 클래스 제거
         $(".btnImg").removeClass("ACTIVE");
@@ -180,6 +207,12 @@ $(document).ready(function() {
 
         const backgroundImage = $(this).css("background-image"); // 선택된 엘리먼트의 background-image 가져오기
         $(".imgFixed .img").css("background-image", backgroundImage);
+        $("#movieImg").css("background-image", backgroundImage);
+
+        
+
+
+        imageUrl = backgroundImage
 
 
 

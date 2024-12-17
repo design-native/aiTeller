@@ -5,10 +5,14 @@ $('.book')
     .on('click', '.flipped .btnPrev', prevPage);
 
 const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-const targetUrl = 'https://story.switchflow.biz/movie/story';
-const targetImageUrl = 'https://story.switchflow.biz/movie/images';
-const targetVoiceUrl = 'https://story.switchflow.biz/movie/voice';
+const targetUrl = 'http://localhost:8080/movie/story';
+const targetImageUrl = 'http://localhost:8080/movie/images';
+//const targetMovieUrl = 'http://localhost:8080/movie/movie/compose';
+const targetMovieUrl = 'http://localhost:8080/movie/movie/compose';
+const targetVoiceUrl = 'http://localhost:8080/movie/voice';
 
+let imageUrl=""
+let voiceUrl=""
 
 /**
  * 서버에서 데이터를 가져오는 함수
@@ -54,11 +58,13 @@ async function fetchImage(prompt) {
       const data = await response.json();
       console.log(data)
 
-      console.log(data.data[0].url)
+      console.log(data.data[0])
       
-      $('#img1').css({'background-image': 'url('+data.data[0].url+')','background-size': '90%'});
-      $('#img2').css({'background-image': 'url('+data.data[1].url+')','background-size': '90%'});
-      $('#img3').css({'background-image': 'url('+data.data[2].url+')','background-size': '90%'});
+      for(i=0;i<data.data.length;i++){
+        index = i+1;
+        $('#img'+index).css({'background-image': 'url('+data.data[i]+')','background-size': '90%'});
+
+      }
  
     } catch (error) {
       console.error('Error fetching page data:', error);
@@ -66,13 +72,19 @@ async function fetchImage(prompt) {
   }
 }
 async function fetchVoice(prompt) {
-    const urlWithParams = `${targetVoiceUrl}?text=${encodeURIComponent(prompt)}&voice_id=3`;
+
+    const simplePrompt = prompt.split("\.")[0] + prompt.split("\.")[1]
+
+
+    var selectedValue = $("#selVoice").val();
+    const urlWithParams = `${targetVoiceUrl}?text=${encodeURIComponent(simplePrompt)}&voice_id=${selectedValue}`;
   
     try {
         const response = await fetch(urlWithParams, {
             method: 'POST',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
+                "Content-Type": "application/json",
             },
         });
   
@@ -81,20 +93,99 @@ async function fetchVoice(prompt) {
         }
   
         const data = await response.json();
+        const url = voiceUrl = data.data;
+
+        // audio의 source 태그의 src 속성 변경
+        $('#audioSource').attr('src', url);
+
+        // audio 태그를 새로 고침하여 변경된 소스를 로드
+        $('#audioPlayer')[0].load();
+        $('#audioPlayer')[0].play();
+
+
+
         console.log(data)
-  
-        console.log(data.data[0].url)
-        
-        $('#img1').css({'background-image': 'url('+data.data[0].url+')','background-size': '90%'});
-        $('#img2').css({'background-image': 'url('+data.data[1].url+')','background-size': '90%'});
-        $('#img3').css({'background-image': 'url('+data.data[2].url+')','background-size': '90%'});
-   
       } catch (error) {
         console.error('Error fetching page data:', error);
         handleError(error);
     }
   }
-  
+ function addLineBreaks(prompt, maxLength = 50) {
+    const words = prompt.split(" ");
+    let result = "";
+    let currentLine = "";
+
+    for (const word of words) {
+        if ((currentLine + word).length > maxLength) {
+            result += currentLine.trim() + "\n";
+            currentLine = word + " ";
+        } else {
+            currentLine += word + " ";
+        }
+    }
+
+    // 마지막 줄 추가
+    result += currentLine.trim();
+    return result;
+}
+  async function fetchMovie(title,prompt) {
+    // URL과 파라미터 구성
+    const urlWithParams = `${targetMovieUrl}?text=${encodeURIComponent(prompt)}`;
+
+    try {
+
+        // Image URL에서 파일 데이터를 가져오기
+        imageUrl = imageUrl.replace("url(\"","")
+        imageUrl = imageUrl.replace("\")","")
+        const imageResponse = await fetch(imageUrl);
+
+        console.log("imageUrl="+imageUrl)
+
+        if (!imageResponse.ok) {
+            throw new Error(`Failed to fetch image file! status: ${imageResponse.status}`);
+        }
+        const imageBlob = await imageResponse.blob();
+        const imageFile = new File([imageBlob], 'image.jpg', { type: 'image/jpeg' });
+
+        // FormData 생성 및 데이터 추가
+        const formData = new FormData();
+        const formattedPrompt = addLineBreaks(prompt, 30);
+
+        const voiceId = $("#selVoice2").val();
+
+        formData.append('voiceId', voiceId); // 텍스트 추가
+        formData.append('title', title); // 텍스트 추가
+        formData.append('subtitle', formattedPrompt); // 텍스트 추가
+        formData.append('bg_image', imageFile); // 이미지 파일 추가
+
+
+        // 멀티파트 데이터 전송
+        const response = await fetch(targetMovieUrl, {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const url = data.data;
+
+        console.log(data);
+        // src 변경
+        $('#videoSource').attr('src', url);
+
+        // 비디오 재생
+        const videoPlayer = $('#videoPlayer')[0];
+        videoPlayer.load();  // 새로운 소스를 로드
+        videoPlayer.play();  // 비디오 재생
+
+    } catch (error) {
+        console.error('Error fetching page data:', error);
+        handleError(error);
+    }
+}
 async function fetchChapterPageData(prompt) {
     $('#img1').css({
         'background-image': 'url(./loading.gif)',
@@ -132,10 +223,24 @@ async function fetchChapterPageData(prompt) {
       }
 
       const data = await response.json();
-      const story = data.data.split("\n\n")
+      handleChapterPage(data,prompt);
 
-      const subject = story[1].split("\n")[0].replace("###","");
-      const contents = story[1].split("\n")[1];
+  } catch (error) {
+      console.error('Error fetching page data:', error);
+      handleError(error);
+  }
+}
+function handleChapterPage(data,prompt){
+    const story = data.data.split("\n\n")
+
+    const subject = story[1].split("\n")[0].replace("###","");
+    const contents = story[1].split("\n")[1];
+
+
+    if (contents == undefined){
+        fetchChapterPageData(prompt);
+        return;
+    }else{
       console.log(story);
       console.log(subject);
       console.log(contents);
@@ -151,10 +256,10 @@ async function fetchChapterPageData(prompt) {
       $("#chapterContents").html(contents)
       $("#chapterTitle2").html(subject)
       $("#chapterContents2").html(contents)
-  } catch (error) {
-      console.error('Error fetching page data:', error);
-      handleError(error);
-  }
+      $("#chapterTitle3").html(subject)
+      $("#chapterContents3").html(contents)
+    }
+
 }
 
 /**
