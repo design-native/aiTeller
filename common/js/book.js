@@ -5,11 +5,11 @@ $('.book')
     .on('click', '.flipped .btnPrev', prevPage);
 
 const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-const targetUrl = 'http://localhost:8080/movie/story';
-const targetImageUrl = 'http://localhost:8080/movie/images';
+const targetUrl = 'http://ss.tosky.co.kr:8080/movie/story';
+const targetImageUrl = 'http://ss.tosky.co.kr:8080/movie/images';
 //const targetMovieUrl = 'http://localhost:8080/movie/movie/compose';
-const targetMovieUrl = 'http://localhost:8080/movie/movie/compose';
-const targetVoiceUrl = 'http://localhost:8080/movie/voice';
+const targetMovieUrl = 'http://ss.tosky.co.kr:8080/movie/movie/compose';
+const targetVoiceUrl = 'http://ss.tosky.co.kr:8080/movie/voice';
 
 let imageUrl=""
 let voiceUrl=""
