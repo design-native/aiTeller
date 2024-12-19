@@ -6,8 +6,8 @@
   h1{ font-size: 4rem; line-height:5.4rem;}
   h2{ font-size: 3rem; line-height: 4.2rem;}
   h3{ font-size: 2.2rem; line-height: 3rem;}
-  h4{ font-size: 1.6rem; line-height: 2.2rem;}
-  h5{ font-size: 1.4rem; line-height: 1.6rem;}
+  h4{ font-size: 1.6rem; line-height: 2.4rem;}
+  h5{ font-size: 1.4rem; line-height: 2.2rem;}
   h6{ font-size: 1rem; line-height: 1.6rem;}
   p{ font-size: 1rem; line-height: 1.8rem;}
   
@@ -34,7 +34,7 @@
   
   }
   .wrap.type-flex.direc-row.size-50p{
-    gap: 60px;
+    gap: 10px;
   }
   .wrap.type-flex.direc-row.size-50p > *{
     flex: 1;
@@ -69,22 +69,30 @@
 html {
   height: 100%;
   overflow: hidden;
+  border:30px solid rgba(196, 156, 110,0.8);
+  border-left: 0;
+  border-right: 0;
+  box-shadow: inset 5px 0 20px rgba(0,0,0,.1);
 }
 body {
   position: relative;
   margin: 0 auto;
   width: 100%;
   height: 100%;
-  max-width: 1400px
+  max-width: 1400px;
+  background-image: url(../resources/bg-pattern.png);
+  background-size: cover;
+  background-position: center;
+  background-color: #b18964;
 }
 
 
 .scene {
-  width: 45%;
-  height: 90%;
-  margin: 4% 5% auto 50%;
+  width: 47%;
+  height: 85%;
+  margin: 7% 5% auto 50%;
   
-  perspective: 1000px;
+  perspective: 3000px;
 }
 
 .book {
@@ -93,6 +101,9 @@ body {
   height: 100%;
   
   transform-style: preserve-3d;
+  box-shadow: 
+    0 4px 15px rgba(0,0,0,0.1),  /* 아래쪽 그림자 */
+    5px 5px 15px rgba(0,0,0,0.05); /* 오른쪽 그림자 */
 }
 
 .page {
@@ -109,18 +120,45 @@ body {
 .front,
 .back {
   position: absolute;
-  
   width: 100%;
   height: 100%;
-  padding: 10% 5% 5%;
+  padding: 10% 8% ;
   box-sizing: border-box;
-  
   backface-visibility: hidden;
-  background: -webkit-gradient(linear, 0% 0%, 100% 100%, from(#FFFFFF), to(#CCCCCC));
-  background: linear-gradient(to bottom right, #fff, #ccc);
+  background: linear-gradient(135deg, #FFFFFF 80%, #eeeeee 100%);
+  box-shadow: 
+  inset 20px 0 30px -20px rgba(0,0,0,0.2),
+  inset 40px 0 40px -30px rgba(0,0,0,0.1),
+  inset -2px 0 5px -2px rgba(0,0,0,0.1);
 }
+
+/* 첫 페이지의 front는 그림자 효과 제거 */
+.page:first-child .front ,
+  .page:last-child .front {
+  box-shadow: none;
+  background: #584635;
+  color: #fff;
+}
+
+.page:first-child .front:before {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 20px;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  border-radius: 2px 0 0 2px;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.1) 20%, rgba(255, 255, 255, 0.1) 45%, rgba(0, 0, 0, 0.15) 49%, rgba(0, 0, 0, 0.15) 84%, rgba(0, 0, 0, 0) 100%);
+}
+
+
 .back {
   transform: rotateY(180deg);
+  box-shadow: 
+    inset -20px 0 30px -20px rgba(0,0,0,0.2),
+    inset -40px 0 40px -30px rgba(0,0,0,0.1),
+    inset 2px 0 5px -2px rgba(0,0,0,0.1);
 }
 
 .page.ACTIVE {
@@ -163,16 +201,16 @@ and (orientation : portrait) {
 
 
 
+
 @font-face {
-  font-family: 'HS-Regular';
-  src: url('https://gcore.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/HS-Regular.woff') format('woff');
+  font-family: 'MaplestoryOTFBold';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/MaplestoryOTFBold.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
-
 @font-face {
-  font-family: 'TTHakgyoansimSonagiR';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_keris@1.0/TTHakgyoansimSonagiR.woff2') format('woff2');
+  font-family: 'MaplestoryOTFLight';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/MaplestoryOTFLight.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
@@ -184,45 +222,134 @@ and (orientation : portrait) {
 .frame .contents > .wrap {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 60px;
+}
+.frame .contents .title{
+  width: 100%;
+  border-radius: 50px;
+  text-align: center;
+  padding: 20px;
+  background-color: rgba(0,0,0,.2);
+  color: #fff;
+  position: relative;
+}
+
+.frame .contents .title::after,.frame .contents .title::before{
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #b18964;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+.frame .contents .title::after{
+  left: 30px;
+}
+.frame .contents .title::before{
+  right: 30px;
 }
 .frame .contents .storyList{
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 50px 40px;
 }
+.frame .contents .storyList .storyItem{
+  background-color: #fff;
+  border-radius: 24px 24px 0 0;
+  padding: 25px 20px 20px;
+  color: #584635;
+  font-weight: 800;
+  position: relative;
+  gap: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.frame .contents .storyList .storyItem::after{
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  width: calc(100% + 30px);
+  height: 16px;
+  background-color: #91755c;
+  border-radius: 2px;
+}
+.frame .contents .storyList .storyItem:hover,
 .frame .contents .storyList .storyItem.ACTIVE{
-  border: 3px solid var(--color-primary);
-  padding: 10px;
+  box-shadow: 2px 20px 20px rgba(0,0,0,.2);
+}
+.frame .contents .storyList .storyItem:hover .btn,
+.frame .contents .storyList .storyItem.ACTIVE .btn{
+  background-color: var(--color-primary);
+  color: #fff;
+  font-weight: 800;
+}
+.frame .contents .storyList .storyItem:hover .label,
+.frame .contents .storyList .storyItem.ACTIVE .label{
+  color: var(--color-primary);
+}
+.frame .contents .storyList .storyItem:hover .label::before,
+.frame .contents .storyList .storyItem:hover .label::after,
+.frame .contents .storyList .storyItem.ACTIVE .label::before,
+.frame .contents .storyList .storyItem.ACTIVE .label::after{
+  background-color: var(--color-primary);
+}
+.frame .contents .storyList .storyItem:hover::after,
+.frame .contents .storyList .storyItem.ACTIVE::after{
+  background-color: var(--color-primary);
 }
 
-.frame .contents .storyList .storyItem > button{
+.frame .contents .storyList .storyItem .label{
+  color: #584635;
+  font-weight: 800;
   width: 100%;
+  font-family: 'MaplestoryOTFBold';
+  text-align: center;
+}
+.frame .contents .storyList .storyItem .label::after,.frame .contents .storyList .storyItem .label::before{
+  content: '';
+  background-color: #91755c;
+  display: inline-block;
+  margin: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  vertical-align: middle;
 }
 .frame .contents .storyList .storyItem .thm {
   background-color: #eee;
   width: 100%;
   height: 0;
-  padding-bottom: 60%;
+  padding-bottom: 55%;
+  border-radius: 12px;
   background-size: cover;
   background-position: center;
-  margin-bottom: 10px;
 }
 .scene .book .front {
   display: flex;
   text-align: center;
   flex-direction: column;
   justify-content: space-between;
-  gap: 20px;
+  gap: 40px;
+  border-radius: 0 8px 8px 0;
+  height: 100%;
 
+}
+.scene .book .front .textBox .owner{
+  border: 1px solid #91755c;
+  border-radius: 30px;
+  width: fit-content;
+  padding: 6px 12px;
+  margin: 10px auto 0;
 }
 .scene .book .front .textBox .title{
-  font-family: 'HS-Regular';
-}
-.scene .book .front .desc{
-  font-family: 'TTHakgyoansimSonagiR';
-  letter-spacing: -.5px;
-
+  font-family: 'MaplestoryOTFBold';
 }
 .scene .book .front .inputBox {
   display: flex;
@@ -231,6 +358,10 @@ and (orientation : portrait) {
 }
 .scene .book .front .inputBox label{
   text-align: left;
+  opacity: .7;
+  font-size: 1.2rem;
+  margin-bottom: 6px;
+  font-weight: 400;
 }
 
   .scene .book .front .inputBox input {
@@ -239,6 +370,9 @@ and (orientation : portrait) {
   padding: 0 12px;
   font-size: 1.6rem;
   text-align: center;
+  background-color: #3f3226;
+  color: #fff;
+  border: 1px solid #705b49;
 }
 .scene .book .front .thm{
   width: calc(100%);
@@ -246,13 +380,19 @@ and (orientation : portrait) {
   flex: 1;
   background-size: cover;
   background-position: center;
+  transition: .5s all;
+  border-radius:6px;
+  box-shadow: inset 0 2px 20px rgba(0,0,0,.2);
+  border: 1px solid #705b49;
 }
 
 
 .scene .book video{
   width: 100% !important;
   flex: 1;
-  background-color: #000;
+  background-color: #3f3226;
+  border-radius: 12px;
+  border: 1px solid #705b49;
 }
 .scene .book .scriptBox {
   flex: 1;
@@ -276,18 +416,26 @@ and (orientation : portrait) {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 30px;
+}
+.imgBox .imgSelect {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 .imgBox .imgSelect .imgOption {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 10px;
+  flex: 1;
 }
-.imgBox .imgSelect .imgOption .btnImg{
-  background-color: #ccc;
+.btnImg{
   height: 0;
   padding-bottom: 33%;
   flex: 1;
   background-size: cover;
+  border:1px solid #ddd;
+  border-radius: 12px;
   background-position: center;
 }
 .imgBox .imgSelect .imgOption .btnImg.ACTIVE {
@@ -321,22 +469,46 @@ and (orientation : portrait) {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 20px;
+  gap: 60px;
+  border-radius: 8px 0 0  8px;
 }
 .back .textBox{
   
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   flex: 1;
+  gap: 12px;
 }
 .front.resultBox .title,
 .back .textBox .title{
-  font-family: 'HS-Regular';
+  font-family: 'MaplestoryOTFBold';
 
+}
+.back .title.panel {
+  width: 100%;
+  text-align: center;
+  border-radius: 30px;
+  padding: 20px;
+  background-color: #b18964;
+  color: #fff;
 }
 
 
+.voiceBox {
+  padding: 30px;
+  border-radius: 20px;
+  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.voiceBox .wrap {
+  gap: 12px;
+}
+.voiceBox select {
+  flex: 1;
+}
 .audioPlayer {
   display: flex;
   align-items: center;
@@ -345,7 +517,6 @@ and (orientation : portrait) {
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 10px;
-  margin-bottom: 20px; /* voiceBox와 간격 */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -354,10 +525,8 @@ and (orientation : portrait) {
   max-width: 400px; /* 플레이어 최대 너비 */
   outline: none;
 }
-body {
-  background-image: url('../../back.jpg'); /* WebP 패턴 이미지 경로 */
-  background-repeat: repeat; /* 패턴 반복 */
-  background-size: auto; /* 패턴 기본 크기 유지 */
-  background-position: top left; /* 패턴 시작 위치 */
 
+
+#btnVoice {
+  width: 100%;
 }

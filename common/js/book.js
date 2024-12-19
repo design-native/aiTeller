@@ -62,7 +62,7 @@ async function fetchImage(prompt) {
       
       for(i=0;i<data.data.length;i++){
         index = i+1;
-        $('#img'+index).css({'background-image': 'url('+data.data[i]+')','background-size': '90%'});
+        $('#img'+index).css({'background-image': 'url('+data.data[i]+')','background-size': 'cover'});
 
       }
  
@@ -188,20 +188,20 @@ async function fetchVoice(prompt) {
 }
 async function fetchChapterPageData(prompt) {
     $('#img1').css({
-        'background-image': 'url(./loading.gif)',
-        'background-size': '30%', // 배경 이미지 크기를 50%로 설정
+        'background-image': 'url(./common/resources/loader.gif)',
+        'background-size': 'auto 100%', // 배경 이미지 크기를 50%로 설정
         'background-repeat': 'no-repeat', // 반복 방지 (필요시)
         'background-position': 'center' // 중앙 정렬 (선택사항)
       });
       $('#img2').css({
-        'background-image': 'url(./loading.gif)',
-        'background-size': '30%', // 배경 이미지 크기를 50%로 설정
+        'background-image': 'url(./common/resources/loader.gif)',
+        'background-size': 'auto 100%', // 배경 이미지 크기를 50%로 설정
         'background-repeat': 'no-repeat', // 반복 방지 (필요시)
         'background-position': 'center' // 중앙 정렬 (선택사항)
       });
       $('#img3').css({
-        'background-image': 'url(./loading.gif)',
-        'background-size': '30%', // 배경 이미지 크기를 50%로 설정
+        'background-image': 'url(./common/resources/loader.gif)',
+        'background-size': 'auto 100%', // 배경 이미지 크기를 50%로 설정
         'background-repeat': 'no-repeat', // 반복 방지 (필요시)
         'background-position': 'center' // 중앙 정렬 (선택사항)
       });
